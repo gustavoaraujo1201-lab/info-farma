@@ -4,12 +4,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = document.getElementById('inputUser');
     const pass = document.getElementById('inputPass');
 
+    // Toggle mostrar/ocultar senha
+    document.querySelectorAll('.toggle-pass').forEach(icon => {
+        icon.addEventListener('click', () => {
+            const input = document.getElementById(icon.dataset.target);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('bx-hide', 'bx-show');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('bx-show', 'bx-hide');
+            }
+        });
+    });
+
     btn?.addEventListener('click', async () => {
         const u = user?.value.trim();
         const p = pass?.value.trim();
 
         if (!u || !p) {
-            showError('Preencha usuário e senha.');
+            showError('Preencha e-mail/usuário e senha.');
             return;
         }
 
@@ -20,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username: u, password: p })
+                body: JSON.stringify({ identifier: u, password: p })
             });
 
             const data = await res.json();
@@ -29,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 sessionStorage.setItem('infofarma_user', data.usuario);
                 window.location.href = '/dashboard';
             } else {
-                showError(data.erro || 'Usuário ou senha incorretos.');
+                showError(data.erro || 'E-mail/usuário ou senha incorretos.');
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
             }
@@ -40,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Permite submeter com Enter
     [user, pass].forEach(input => {
         input?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') btn?.click();
