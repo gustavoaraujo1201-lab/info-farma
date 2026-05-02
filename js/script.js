@@ -130,17 +130,6 @@ function filterMeds() {
 window.addEventListener('scroll', () => {
     const navbar = document.getElementById('navbar');
     if (navbar) navbar.classList.toggle('scrolled', window.scrollY > 10);
-
-    // Active nav link
-    const sections = ['inicio','acesso','tarja','medicamentos','legislacao','varejo','atencao','noticias','sobre'];
-    let current = '';
-    sections.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 80) current = id;
-    });
-    document.querySelectorAll('.nav-links a').forEach(a => {
-        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
-    });
 });
 
 // ─── MOBILE MENU ────────────────────────────────────────────
