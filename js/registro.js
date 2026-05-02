@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     [email, user, pass, pass2].forEach(input => {
-        input?.addEventListener('keydown', e => {
+        input?.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') btn?.click();
         });
     });

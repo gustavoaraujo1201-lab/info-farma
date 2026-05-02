@@ -8,9 +8,9 @@ export default async function handler(req, res) {
         return res.status(405).json({ erro: 'Método não permitido.' });
     }
 
-    const { nome, email, username, password } = req.body;
+    const { email, username, password } = req.body;
 
-    if (!nome || !email || !username || !password) {
+    if (!email || !username || !password) {
         return res.status(400).json({ erro: 'Preencha todos os campos.' });
     }
 
@@ -64,7 +64,7 @@ export default async function handler(req, res) {
                     'Content-Type': 'application/json',
                     'Prefer': 'return=representation'
                 },
-                body: JSON.stringify({ nome, email, username, password })
+                body: JSON.stringify({ email, username, password })
             }
         );
 
@@ -73,7 +73,6 @@ export default async function handler(req, res) {
         if (insert.ok && inserted && inserted.length > 0) {
             return res.json({ sucesso: true, usuario: inserted[0].username });
         } else {
-            // Supabase retornou erro detalhado
             const errMsg = inserted?.message || inserted?.details || 'Erro ao criar conta.';
             return res.status(500).json({ erro: errMsg });
         }
