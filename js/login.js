@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = document.getElementById('inputUser');
     const pass = document.getElementById('inputPass');
 
-    btn?.addEventListener('click', () => {
+    btn?.addEventListener('click', async () => {
         const u = user?.value.trim();
         const p = pass?.value.trim();
 
@@ -13,8 +13,30 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Simulação de login — substituir por autenticação real futuramente
-        window.location.href = '/dashboard';
+        btn.disabled = true;
+        btn.textContent = 'Entrando...';
+
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username: u, password: p })
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.sucesso) {
+                window.location.href = '/dashboard';
+            } else {
+                showError(data.erro || 'Usuário ou senha incorretos.');
+                btn.disabled = false;
+                btn.textContent = 'Entrar';
+            }
+        } catch (err) {
+            showError('Erro de conexão. Tente novamente.');
+            btn.disabled = false;
+            btn.textContent = 'Entrar';
+        }
     });
 
     // Permite submeter com Enter
