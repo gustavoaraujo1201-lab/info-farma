@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (res.ok && data.sucesso) {
+                sessionStorage.setItem('infofarma_user', data.usuario);
                 window.location.href = '/dashboard';
             } else {
                 showError(data.erro || 'Usuário ou senha incorretos.');

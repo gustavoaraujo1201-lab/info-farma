@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Proteção de rota: redireciona para login se não estiver autenticado -->
+    <script>
+        if (!sessionStorage.getItem('infofarma_user')) {
+            window.location.replace('/login');
+        }
+    </script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -30,7 +36,7 @@
                 <li><a href="#" class="nav-tab" data-page="sobre">Sobre</a></li>
             </ul>
             <div class="nav-actions">
-                <a href="/login" class="btn-sair"><i class='bx bx-log-out'></i> Sair</a>
+                <a href="#" class="btn-sair" onclick="sessionStorage.removeItem('infofarma_user'); window.location.href='/login';"><i class='bx bx-log-out'></i> Sair</a>
                 <button class="nav-toggle" id="navToggle"><i class='bx bx-menu'></i></button>
             </div>
         </div>
