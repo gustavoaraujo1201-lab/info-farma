@@ -1,9 +1,12 @@
 {
   "rewrites": [
-    { "source": "/api/login", "destination": "/api/login.js" },
-    { "source": "/api/medicamentos", "destination": "/api/medicamentos.js" },
-    { "source": "/login", "destination": "/pages/login.html" },
-    { "source": "/dashboard", "destination": "/index.html" },
-    { "source": "/", "destination": "/pages/login.html" }
+    { "source": "/api/login",     "destination": "/api/login.js" },
+    { "source": "/api/registro",  "destination": "/api/registro.js" },
+    { "source": "/api/recuperar", "destination": "/api/recuperar.js" },
+    { "source": "/login",         "destination": "/pages/login.html" },
+    { "source": "/registro",      "destination": "/pages/registro.html" },
+    { "source": "/recuperar",     "destination": "/pages/recuperar.html" },
+    { "source": "/dashboard",     "destination": "/index.html" },
+    { "source": "/",              "destination": "/pages/login.html" }
   ]
 }

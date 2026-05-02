@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Info-Farma · Recuperar Senha</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+<body class="login-body">
+    <div class="bg-gradient"></div>
+    <div class="stars"></div>
+
+    <div class="login-wrapper">
+        <div class="logo">
+            <div class="logo-text">
+                <span>Info-</span><span>Farma</span>
+            </div>
+            <div class="logo-sub">Portal Farmacêutico Brasileiro</div>
+        </div>
+
+        <div class="card">
+            <h2>Recuperar senha</h2>
+            <p>Digite seu e-mail para receber o link de recuperação</p>
+
+            <div class="field">
+                <input type="email" id="inputEmail" placeholder="Seu e-mail" required>
+                <i class='bx bxs-envelope'></i>
+            </div>
+
+            <button type="button" class="btn-entrar" id="btnRecuperar">Enviar link</button>
+
+            <div class="link-registro">
+                Lembrou a senha? <a href="/login">Voltar ao login</a>
+            </div>
+        </div>
+
+        <div class="badges">
+            <span class="badge">ANVISA</span>
+            <span class="badge">CFF</span>
+            <span class="badge">Ministério da Saúde</span>
+        </div>
+        <p class="login-footer">
+            © 2026 Info-Farma &mdash; Desenvolvido para farmacêuticos brasileiros.
+        </p>
+    </div>
+
+    <script src="../js/recuperar.js"></script>
+</body>
+</html>
