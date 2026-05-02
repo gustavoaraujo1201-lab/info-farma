@@ -8,15 +8,22 @@ export default async function handler(req, res) {
         return res.status(405).json({ erro: 'Método não permitido.' });
     }
 
-    const { username, password } = req.body;
+    // CORRIGIDO: o frontend envia "identifier" (e-mail ou usuário) e "password"
+    const { identifier, password } = req.body;
 
-    if (!username || !password) {
-        return res.status(400).json({ erro: 'Preencha usuário e senha.' });
+    if (!identifier || !password) {
+        return res.status(400).json({ erro: 'Preencha e-mail/usuário e senha.' });
     }
 
     try {
+        // CORRIGIDO: busca pelo campo "email" OU pelo campo "username" na tabela
+        // Verifica se o identifier parece um e-mail ou um nome de usuário
+        const isEmail = identifier.includes('@');
+
+        const field = isEmail ? 'email' : 'username';
+
         const response = await fetch(
-            `${SUPABASE_URL}/rest/v1/usuarios?username=eq.${encodeURIComponent(username)}&password=eq.${encodeURIComponent(password)}&select=id,username`,
+            `${SUPABASE_URL}/rest/v1/usuarios?${field}=eq.${encodeURIComponent(identifier)}&password=eq.${encodeURIComponent(password)}&select=id,username,email`,
             {
                 headers: {
                     'apikey': SUPABASE_KEY,
@@ -31,7 +38,7 @@ export default async function handler(req, res) {
         if (data && data.length > 0) {
             return res.json({ sucesso: true, usuario: data[0].username });
         } else {
-            return res.status(401).json({ erro: 'Usuário ou senha incorretos.' });
+            return res.status(401).json({ erro: 'E-mail/usuário ou senha incorretos.' });
         }
     } catch (err) {
         return res.status(500).json({ erro: 'Erro interno do servidor.' });
