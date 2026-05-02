@@ -272,7 +272,7 @@
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-' + id)?.classList.add('active');
-            document.querySelectorAll('.nav-tab').forEach(a => {
+            document.querySelectorAll('.nav-links .nav-tab').forEach(a => {
                 a.classList.toggle('active', a.dataset.page === id);
             });
             window.scrollTo({ top: 0, behavior: 'smooth' });
