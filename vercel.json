@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/api/login", "destination": "/api/login.js" },
+    { "source": "/api/medicamentos", "destination": "/api/medicamentos.js" },
+    { "source": "/login", "destination": "/pages/login.html" },
+    { "source": "/dashboard", "destination": "/index.html" },
+    { "source": "/", "destination": "/pages/login.html" }
+  ]
+}
