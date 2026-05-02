@@ -43,9 +43,12 @@
 .login-wrapper {
     position: relative; z-index: 10;
     width: 100%; max-width: 440px; padding: 20px;
+    /* permite scroll quando o conteúdo for maior que a tela */
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
-.logo { text-align: center; margin-bottom: 32px; }
+.logo { text-align: center; margin-bottom: 20px; }
 .logo-text {
     font-family: 'Montserrat', sans-serif;
     font-size: 32px; font-weight: 800; letter-spacing: -0.5px;
@@ -61,20 +64,20 @@
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.1);
     backdrop-filter: blur(20px);
-    border-radius: 20px; padding: 40px 36px;
+    border-radius: 20px; padding: 28px 36px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
 }
-.card h2 { font-size: 28px; font-weight: 600; color: #fff; margin-bottom: 6px; text-align: center; }
-.card > p { font-size: 16px; color: rgba(255,255,255,0.4); margin-bottom: 28px; text-align: center; }
+.card h2 { font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 4px; text-align: center; }
+.card > p { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 20px; text-align: center; }
 
-.field { position: relative; margin-bottom: 18px; }
+.field { position: relative; margin-bottom: 12px; }
 .field input {
-    width: 100%; height: 52px;
+    width: 100%; height: 46px;
     box-sizing: border-box;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px; outline: none; color: #fff;
-    font-family: 'Poppins', sans-serif; font-size: 16px;
+    font-family: 'Poppins', sans-serif; font-size: 14px;
     padding: 0 48px 0 18px;
     transition: border-color 0.2s, background 0.2s;
 }
@@ -105,13 +108,13 @@
 .row-opts a:hover { text-decoration: underline; }
 
 .btn-entrar {
-    width: 100%; height: 52px; border: none; border-radius: 12px;
+    width: 100%; height: 46px; border: none; border-radius: 12px;
     background: linear-gradient(135deg, #0ea5e9, #06b6d4);
     color: #fff; font-family: 'Poppins', sans-serif;
-    font-size: 18px; font-weight: 600; cursor: pointer;
+    font-size: 16px; font-weight: 600; cursor: pointer;
     transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 4px 20px rgba(6,182,212,0.35);
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 .btn-entrar:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(6,182,212,0.5); }
 .btn-entrar:active { transform: translateY(0); }
@@ -122,7 +125,7 @@
 
 .badges {
     display: flex; justify-content: center;
-    gap: 10px; margin-top: 28px; flex-wrap: wrap;
+    gap: 10px; margin-top: 16px; flex-wrap: wrap;
 }
 .badge {
     font-size: 10px; color: rgba(255,255,255,0.3);
