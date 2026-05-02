@@ -1,54 +1,87 @@
-// api/registro.js — Vercel Serverless Function
+// ─── REGISTRO ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+    const btn   = document.getElementById('btnRegistrar');
+    const email = document.getElementById('inputEmail');
+    const user  = document.getElementById('inputUser');
+    const pass  = document.getElementById('inputPass');
+    const pass2 = document.getElementById('inputPass2');
 
-const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ixbstkgxlyadphlpnshn.supabase.co';
-const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4YnN0a2d4bHlhZHBobHBuc2huIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTc2OTIsImV4cCI6MjA5MzI5MzY5Mn0.QmTgpuJApLRAS9KDVkS4qVh_zC3cFS6_vmEsmuMDdfk';
-
-export default async function handler(req, res) {
-    if (req.method !== 'POST') {
-        return res.status(405).json({ erro: 'Método não permitido.' });
-    }
-
-    const { nome, email, username, password } = req.body;
-
-    if (!nome || !email || !username || !password) {
-        return res.status(400).json({ erro: 'Preencha todos os campos.' });
-    }
-
-    try {
-        // Verifica se username ou email já existem
-        const checkRes = await fetch(
-            `${SUPABASE_URL}/rest/v1/usuarios?or=(username.eq.${encodeURIComponent(username)},email.eq.${encodeURIComponent(email)})&select=id`,
-            {
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`
-                }
+    // Toggle mostrar/ocultar senha
+    document.querySelectorAll('.toggle-pass').forEach(icon => {
+        icon.addEventListener('click', () => {
+            const input = document.getElementById(icon.dataset.target);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('bx-hide', 'bx-show');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('bx-show', 'bx-hide');
             }
-        );
-        const existing = await checkRes.json();
-        if (existing && existing.length > 0) {
-            return res.status(409).json({ erro: 'Usuário ou e-mail já cadastrado.' });
-        }
-
-        // Insere novo usuário
-        const insertRes = await fetch(`${SUPABASE_URL}/rest/v1/usuarios`, {
-            method: 'POST',
-            headers: {
-                'apikey': SUPABASE_KEY,
-                'Authorization': `Bearer ${SUPABASE_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({ nome, email, username, password })
         });
+    });
 
-        if (insertRes.ok) {
-            return res.json({ sucesso: true });
-        } else {
-            const err = await insertRes.json();
-            return res.status(500).json({ erro: err.message || 'Erro ao criar conta.' });
+    btn?.addEventListener('click', async () => {
+        removeMsg();
+
+        const e  = email?.value.trim();
+        const u  = user?.value.trim();
+        const p  = pass?.value.trim();
+        const p2 = pass2?.value.trim();
+
+        if (!e || !u || !p || !p2) {
+            showMsg('Preencha todos os campos.', 'error'); return;
         }
-    } catch (err) {
-        return res.status(500).json({ erro: 'Erro interno do servidor.' });
-    }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
+            showMsg('E-mail inválido.', 'error'); return;
+        }
+        if (p.length < 6) {
+            showMsg('A senha deve ter pelo menos 6 caracteres.', 'error'); return;
+        }
+        if (p !== p2) {
+            showMsg('As senhas não coincidem.', 'error'); return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = 'Criando conta...';
+
+        try {
+            const res = await fetch('/api/registro', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: e, username: u, password: p })
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.sucesso) {
+                showMsg('Conta criada com sucesso! Redirecionando...', 'success');
+                setTimeout(() => window.location.href = '/login', 2000);
+            } else {
+                showMsg(data.erro || 'Erro ao criar conta.', 'error');
+                btn.disabled = false;
+                btn.textContent = 'Criar conta';
+            }
+        } catch {
+            showMsg('Erro de conexão. Tente novamente.', 'error');
+            btn.disabled = false;
+            btn.textContent = 'Criar conta';
+        }
+    });
+
+    [email, user, pass, pass2].forEach(input => {
+        input?.addEventListener('keydown', e => {
+            if (e.key === 'Enter') btn?.click();
+        });
+    });
+});
+
+function showMsg(msg, type) {
+    removeMsg();
+    const el = document.createElement('p');
+    el.id = 'form-msg';
+    el.style.cssText = `color:${type === 'success' ? '#10b981' : '#ef4444'};font-size:13px;text-align:center;margin-top:-6px;margin-bottom:10px;`;
+    el.textContent = msg;
+    document.getElementById('btnRegistrar').before(el);
 }
+
+function removeMsg() { document.getElementById('form-msg')?.remove(); }

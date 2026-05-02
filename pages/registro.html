@@ -26,7 +26,7 @@
             <p>Preencha os dados para se registrar</p>
 
             <div class="field">
-                <input type="text" id="inputNome" placeholder="Nome completo" required>
+                <input type="text" id="inputUser" placeholder="Nome de usuário" required>
                 <i class='bx bxs-user'></i>
             </div>
             <div class="field">
@@ -34,16 +34,12 @@
                 <i class='bx bxs-envelope'></i>
             </div>
             <div class="field">
-                <input type="text" id="inputUser" placeholder="Nome de usuário" required>
-                <i class='bx bxs-id-card'></i>
-            </div>
-            <div class="field">
                 <input type="password" id="inputPass" placeholder="Senha" required>
-                <i class='bx bxs-lock-alt'></i>
+                <i class='bx bx-hide toggle-pass' data-target="inputPass" style="pointer-events:all;cursor:pointer;"></i>
             </div>
             <div class="field">
                 <input type="password" id="inputPass2" placeholder="Confirmar senha" required>
-                <i class='bx bxs-lock'></i>
+                <i class='bx bx-hide toggle-pass' data-target="inputPass2" style="pointer-events:all;cursor:pointer;"></i>
             </div>
 
             <button type="button" class="btn-entrar" id="btnRegistrar">Criar conta</button>

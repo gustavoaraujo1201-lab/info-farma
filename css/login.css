@@ -2,11 +2,12 @@
 .login-body {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;
     background: #0a0e1a;
     position: relative;
+    padding: 20px 0;
 }
 
 .bg-gradient {
@@ -43,9 +44,6 @@
 .login-wrapper {
     position: relative; z-index: 10;
     width: 100%; max-width: 440px; padding: 20px;
-    /* permite scroll quando o conteúdo for maior que a tela */
-    max-height: 100vh;
-    overflow-y: auto;
 }
 
 .logo { text-align: center; margin-bottom: 20px; }
