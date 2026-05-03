@@ -4,6 +4,27 @@
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ixbstkgxlyadphlpnshn.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4YnN0a2d4bHlhZHBobHBuc2huIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTc2OTIsImV4cCI6MjA5MzI5MzY5Mn0.QmTgpuJApLRAS9KDVkS4qVh_zC3cFS6_vmEsmuMDdfk';
 
+// ─── Palavras proibidas no nome de usuário ───────────────────
+const PALAVRAS_PROIBIDAS = [
+    // Português
+    'puta', 'puto', 'merda', 'bosta', 'corno', 'corna', 'viado', 'viadão',
+    'buceta', 'boceta', 'xoxota', 'xereca', 'piroca', 'pau', 'rola', 'pinto',
+    'cu', 'cú', 'cuzão', 'cuzao', 'fdp', 'filhadaputa', 'filhodaputa',
+    'porra', 'caralho', 'cacete', 'desgraça', 'desgraca', 'safado', 'safada',
+    'vagabundo', 'vagabunda', 'prostituta', 'prostituída', 'traveco',
+    'otario', 'otário', 'imbecil', 'idiota', 'cretino', 'babaca',
+    'arrombado', 'arrombada', 'fudido', 'fudida', 'foda', 'fodase',
+    // Inglês
+    'fuck', 'shit', 'bitch', 'asshole', 'bastard', 'cunt', 'dick',
+    'cock', 'pussy', 'nigger', 'nigga', 'faggot', 'whore', 'slut',
+    'damn', 'crap', 'prick', 'twat',
+];
+
+function contemPalavraProibida(texto) {
+    const textoLower = texto.toLowerCase().replace(/\s+/g, '');
+    return PALAVRAS_PROIBIDAS.some(palavra => textoLower.includes(palavra));
+}
+
 // ─── Rate Limiting em memória ────────────────────────────────
 const attempts = new Map();
 function isRateLimited(ip) {
@@ -47,11 +68,13 @@ export default async function handler(req, res) {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean))
         return res.status(400).json({ erro: 'E-mail inválido.' });
 
-    // ─── Validação do usuário: 3-30 caracteres, sem espaços ──
-    if (usernameClean.length < 3 || usernameClean.length > 30)
-        return res.status(400).json({ erro: 'Usuário deve ter entre 3 e 30 caracteres.' });
-    if (/\s/.test(usernameClean))
-        return res.status(400).json({ erro: 'Usuário não pode conter espaços.' });
+    // ─── Validação do usuário: apenas tamanho e palavrões ────
+    if (usernameClean.length < 3)
+        return res.status(400).json({ erro: 'Usuário deve ter pelo menos 3 caracteres.' });
+    if (usernameClean.length > 30)
+        return res.status(400).json({ erro: 'Usuário deve ter no máximo 30 caracteres.' });
+    if (contemPalavraProibida(usernameClean))
+        return res.status(400).json({ erro: 'Nome de usuário contém palavras não permitidas.' });
 
     if (passwordRaw.length < 8)
         return res.status(400).json({ erro: 'A senha deve ter pelo menos 8 caracteres.' });
