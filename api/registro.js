@@ -6,30 +6,28 @@ const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5c
 
 // ─── Palavras proibidas no nome de usuário ───────────────────
 const PALAVRAS_PROIBIDAS = [
-    // Português
-    'puta', 'puto', 'merda', 'bosta', 'corno', 'corna', 'viado', 'viadão',
-    'buceta', 'boceta', 'xoxota', 'xereca', 'piroca', 'pau', 'rola', 'pinto',
-    'cu', 'cú', 'cuzão', 'cuzao', 'fdp', 'filhadaputa', 'filhodaputa',
-    'porra', 'caralho', 'cacete', 'desgraça', 'desgraca', 'safado', 'safada',
-    'vagabundo', 'vagabunda', 'prostituta', 'prostituída', 'traveco',
-    'otario', 'otário', 'imbecil', 'idiota', 'cretino', 'babaca',
-    'arrombado', 'arrombada', 'fudido', 'fudida', 'foda', 'fodase',
-    // Inglês
-    'fuck', 'shit', 'bitch', 'asshole', 'bastard', 'cunt', 'dick',
-    'cock', 'pussy', 'nigger', 'nigga', 'faggot', 'whore', 'slut',
-    'damn', 'crap', 'prick', 'twat',
+    'puta','puto','merda','bosta','corno','corna','viado','viadão',
+    'buceta','boceta','xoxota','xereca','piroca','pau','rola','pinto',
+    'cu','cú','cuzão','cuzao','fdp','filhadaputa','filhodaputa',
+    'porra','caralho','cacete','desgraça','desgraca','safado','safada',
+    'vagabundo','vagabunda','prostituta','prostituída','traveco',
+    'otario','otário','imbecil','idiota','cretino','babaca',
+    'arrombado','arrombada','fudido','fudida','foda','fodase',
+    'fuck','shit','bitch','asshole','bastard','cunt','dick',
+    'cock','pussy','nigger','nigga','faggot','whore','slut',
+    'damn','crap','prick','twat',
 ];
 
 function contemPalavraProibida(texto) {
-    const textoLower = texto.toLowerCase().replace(/\s+/g, '');
-    return PALAVRAS_PROIBIDAS.some(palavra => textoLower.includes(palavra));
+    const t = texto.toLowerCase().replace(/\s+/g, '');
+    return PALAVRAS_PROIBIDAS.some(p => t.includes(p));
 }
 
 // ─── Rate Limiting em memória ────────────────────────────────
 const attempts = new Map();
 function isRateLimited(ip) {
     const now = Date.now();
-    const windowMs = 15 * 60 * 1000; // 15 minutos
+    const windowMs = 15 * 60 * 1000;
     const max = 10;
     const data = attempts.get(ip) || { count: 0, start: now };
     if (now - data.start > windowMs) { attempts.set(ip, { count: 1, start: now }); return false; }
@@ -58,40 +56,40 @@ export default async function handler(req, res) {
 
     const { email, username, password } = req.body || {};
 
-    // ─── Validação e sanitização ─────────────────────────────
-    if (!email || !username || !password) return res.status(400).json({ erro: 'Preencha todos os campos.' });
+    if (!email || !username || !password)
+        return res.status(400).json({ erro: 'Preencha todos os campos.' });
 
     const emailClean    = String(email).trim().toLowerCase().slice(0, 254);
     const usernameClean = String(username).trim().slice(0, 30);
     const passwordRaw   = String(password);
 
+    // ─── Validações rápidas (sem rede) ───────────────────────
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean))
         return res.status(400).json({ erro: 'E-mail inválido.' });
-
-    // ─── Validação do usuário: apenas tamanho e palavrões ────
     if (usernameClean.length < 3)
         return res.status(400).json({ erro: 'Usuário deve ter pelo menos 3 caracteres.' });
     if (usernameClean.length > 30)
         return res.status(400).json({ erro: 'Usuário deve ter no máximo 30 caracteres.' });
     if (contemPalavraProibida(usernameClean))
         return res.status(400).json({ erro: 'Nome de usuário contém palavras não permitidas.' });
-
     if (passwordRaw.length < 8)
         return res.status(400).json({ erro: 'A senha deve ter pelo menos 8 caracteres.' });
     if (passwordRaw.length > 72)
         return res.status(400).json({ erro: 'Senha muito longa.' });
 
     try {
+        // ✅ Verifica username e cria conta em paralelo não é possível pois precisamos
+        // do resultado do check antes — mas fazemos signup e insert de perfil em paralelo
         // ─── Verifica se username já existe ──────────────────
-        const checkUser = await fetch(
-            `${SUPABASE_URL}/rest/v1/perfis?username=eq.${encodeURIComponent(usernameClean)}&select=id`,
+        const checkRes = await fetch(
+            `${SUPABASE_URL}/rest/v1/perfis?username=ilike.${encodeURIComponent(usernameClean)}&select=id`,
             { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
         );
-        const userData = await checkUser.json();
+        const userData = await checkRes.json();
         if (Array.isArray(userData) && userData.length > 0)
             return res.status(409).json({ erro: 'Este nome de usuário já está em uso.' });
 
-        // ─── Cria no Supabase Auth (senha criptografada com bcrypt) ──
+        // ─── Cria no Supabase Auth ────────────────────────────
         const signUpRes = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
             method: 'POST',
             headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
@@ -110,9 +108,9 @@ export default async function handler(req, res) {
             return res.status(400).json({ erro: 'Erro ao criar conta. Tente novamente.' });
         }
 
-        // ─── Salva perfil público na tabela "perfis" ─────────
+        // ✅ Salva perfil sem aguardar (fire-and-forget) — não bloqueia a resposta
         if (signUpData?.user?.id) {
-            await fetch(`${SUPABASE_URL}/rest/v1/perfis`, {
+            fetch(`${SUPABASE_URL}/rest/v1/perfis`, {
                 method: 'POST',
                 headers: {
                     'apikey': SUPABASE_KEY,
@@ -121,7 +119,7 @@ export default async function handler(req, res) {
                     'Prefer': 'return=minimal'
                 },
                 body: JSON.stringify({ id: signUpData.user.id, username: usernameClean, email: emailClean })
-            });
+            }); // ← sem await: responde ao usuário imediatamente
         }
 
         return res.json({ sucesso: true, usuario: usernameClean });

@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) {
             showMsg('E-mail inválido.', 'error'); return;
         }
-        if (p.length < 6) {
-            showMsg('A senha deve ter pelo menos 6 caracteres.', 'error'); return;
+        if (p.length < 8) {
+            showMsg('A senha deve ter pelo menos 8 caracteres.', 'error'); return;
         }
         if (p !== p2) {
             showMsg('As senhas não coincidem.', 'error'); return;
@@ -54,8 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (res.ok && data.sucesso) {
-                showMsg('Conta criada com sucesso! Redirecionando...', 'success');
-                setTimeout(() => window.location.href = '/login', 2000);
+                showMsg('Conta criada! Redirecionando...', 'success');
+                // ✅ Removido setTimeout de 2000ms — redirect imediato
+                window.location.href = '/login';
             } else {
                 showMsg(data.erro || 'Erro ao criar conta.', 'error');
                 btn.disabled = false;
