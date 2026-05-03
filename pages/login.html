@@ -14,25 +14,25 @@
     <div class="stars"></div>
 
     <div class="login-wrapper">
-        <div class="logo">
-            <div class="logo-text">
-                <span>Info-</span><span>Farma</span>
-            </div>
-            <div class="logo-sub">Portal Farmacêutico Brasileiro</div>
-        </div>
-
         <div class="card">
+
+            <!-- ✅ Logo dentro do card -->
+            <div class="logo">
+                <div class="logo-text">
+                    <span>Info-</span><span>Farma</span>
+                </div>
+                <div class="logo-sub">Portal Farmacêutico Brasileiro</div>
+            </div>
+
             <h2>Bem-vindo de volta</h2>
             <p>Acesse sua conta para continuar</p>
 
             <div class="field">
-                <!-- ALTERADO: placeholder atualizado para "E-mail ou Usuário" -->
                 <input type="text" id="inputUser" placeholder="E-mail ou Usuário" required>
                 <i class='bx bxs-user'></i>
             </div>
             <div class="field">
                 <input type="password" id="inputPass" placeholder="Senha" required>
-                <!-- ALTERADO: ícone trocado de cadeado para olho (toggle senha) -->
                 <i class='bx bx-hide toggle-pass' data-target="inputPass" style="pointer-events:all;cursor:pointer;"></i>
             </div>
 
@@ -46,17 +46,19 @@
             <div class="link-registro">
                 Não tem uma conta? <a href="/registro">Registrar-se</a>
             </div>
-        </div>
 
-        <div class="badges">
-            <span class="badge">ANVISA</span>
-            <span class="badge">CFF</span>
-            <span class="badge">Ministério da Saúde</span>
-        </div>
+            <!-- ✅ Badges e rodapé dentro do card -->
+            <div class="badges">
+                <span class="badge">ANVISA</span>
+                <span class="badge">CFF</span>
+                <span class="badge">Ministério da Saúde</span>
+            </div>
 
-        <p class="login-footer">
-            © 2026 Info-Farma &mdash; Desenvolvido para farmacêuticos brasileiros.
-        </p>
+            <p class="login-footer">
+                © 2026 Info-Farma &mdash; Desenvolvido para farmacêuticos brasileiros.
+            </p>
+
+        </div>
     </div>
 
     <script src="../js/login.js"></script>

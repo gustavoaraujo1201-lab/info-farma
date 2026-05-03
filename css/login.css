@@ -2,12 +2,13 @@
 .login-body {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     min-height: 100vh;
     overflow-y: auto;
     background: #0a0e1a;
     position: relative;
-    padding: 20px 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .bg-gradient {
@@ -41,51 +42,53 @@
         radial-gradient(2px 2px at 35%  5%, rgba(255,255,255,0.8), transparent);
 }
 
-/* ✅ wrapper ocupa altura total e empurra rodapé para baixo */
+/* ✅ wrapper centralizado, sem altura mínima */
 .login-wrapper {
     position: relative; z-index: 10;
-    width: 100%; max-width: 440px; padding: 20px;
-    min-height: calc(100vh - 40px);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    width: 100%; max-width: 480px;
 }
 
-/* agrupa logo + card + badges no centro */
-.login-wrapper > *:not(.login-footer) {
-    flex-shrink: 0;
-}
-
-.logo { text-align: center; margin-bottom: 20px; }
+/* ─── LOGO dentro do card ────────────────────────────────────── */
+.logo { text-align: center; margin-bottom: 24px; }
 .logo-text {
     font-family: 'Montserrat', sans-serif;
-    font-size: 32px; font-weight: 800; letter-spacing: -0.5px;
+    font-size: 38px; font-weight: 800; letter-spacing: -0.5px;
+    line-height: 1.1;
 }
 .logo-text span:first-child { color: #fff; }
 .logo-text span:last-child  { color: #06b6d4; }
 .logo-sub {
     font-size: 12px; color: rgba(255,255,255,0.4);
-    letter-spacing: 3px; text-transform: uppercase; margin-top: 4px;
+    letter-spacing: 3px; text-transform: uppercase; margin-top: 6px;
 }
 
+/* ─── CARD maior e com tudo dentro ──────────────────────────── */
 .card {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.1);
     backdrop-filter: blur(20px);
-    border-radius: 20px; padding: 28px 36px;
+    border-radius: 24px;
+    padding: 40px 44px 32px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
 }
-.card h2 { font-size: 24px; font-weight: 600; color: #fff; margin-bottom: 4px; text-align: center; }
-.card > p { font-size: 14px; color: rgba(255,255,255,0.4); margin-bottom: 20px; text-align: center; }
+.card h2 {
+    font-size: 26px; font-weight: 600; color: #fff;
+    margin-bottom: 6px; text-align: center;
+}
+.card > p {
+    font-size: 14px; color: rgba(255,255,255,0.4);
+    margin-bottom: 28px; text-align: center;
+}
 
-.field { position: relative; margin-bottom: 12px; }
+/* ─── CAMPOS maiores ─────────────────────────────────────────── */
+.field { position: relative; margin-bottom: 16px; }
 .field input {
-    width: 100%; height: 46px;
+    width: 100%; height: 52px;
     box-sizing: border-box;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
     border-radius: 12px; outline: none; color: #fff;
-    font-family: 'Poppins', sans-serif; font-size: 14px;
+    font-family: 'Poppins', sans-serif; font-size: 15px;
     padding: 0 48px 0 18px;
     transition: border-color 0.2s, background 0.2s;
 }
@@ -96,7 +99,7 @@
 .field input::placeholder { color: rgba(255,255,255,0.3); }
 .field i {
     position: absolute; right: 16px; top: 50%;
-    transform: translateY(-50%); font-size: 20px;
+    transform: translateY(-50%); font-size: 22px;
     color: rgba(255,255,255,0.3); pointer-events: none;
     transition: color 0.2s;
 }
@@ -105,7 +108,7 @@
 .row-opts {
     display: flex; align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px; font-size: 13px;
+    margin-bottom: 28px; font-size: 13px;
 }
 .row-opts label {
     display: flex; align-items: center;
@@ -115,25 +118,28 @@
 .row-opts a { color: #06b6d4; text-decoration: none; }
 .row-opts a:hover { text-decoration: underline; }
 
+/* ─── BOTÃO maior ────────────────────────────────────────────── */
 .btn-entrar {
-    width: 100%; height: 46px; border: none; border-radius: 12px;
+    width: 100%; height: 52px; border: none; border-radius: 12px;
     background: linear-gradient(135deg, #0ea5e9, #06b6d4);
     color: #fff; font-family: 'Poppins', sans-serif;
-    font-size: 16px; font-weight: 600; cursor: pointer;
+    font-size: 17px; font-weight: 600; cursor: pointer;
     transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 4px 20px rgba(6,182,212,0.35);
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+    letter-spacing: 0.3px;
 }
 .btn-entrar:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(6,182,212,0.5); }
 .btn-entrar:active { transform: translateY(0); }
 
-.link-registro { text-align: center; font-size: 13px; color: rgba(255,255,255,0.4); }
+.link-registro { text-align: center; font-size: 14px; color: rgba(255,255,255,0.4); }
 .link-registro a { color: #06b6d4; text-decoration: none; font-weight: 600; }
 .link-registro a:hover { text-decoration: underline; }
 
+/* ─── BADGES e RODAPÉ dentro do card ────────────────────────── */
 .badges {
     display: flex; justify-content: center;
-    gap: 10px; margin-top: 16px; flex-wrap: wrap;
+    gap: 10px; margin-top: 24px; flex-wrap: wrap;
 }
 .badge {
     font-size: 10px; color: rgba(255,255,255,0.3);
@@ -143,12 +149,10 @@
     letter-spacing: 0.5px; text-transform: uppercase;
 }
 
-/* ✅ rodapé sempre no fim da página */
 .login-footer {
     text-align: center;
-    padding: 10px 20px 0;
+    padding: 16px 0 0;
     font-size: 11px;
-    color: rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.2);
     letter-spacing: 0.3px;
-    margin-top: auto;
 }
