@@ -22,10 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const u = user?.value.trim();
         const p = pass?.value.trim();
 
-        if (!u || !p) {
-            showError('Preencha e-mail/usuário e senha.');
-            return;
-        }
+        if (!u || !p) { showError('Preencha e-mail/usuário e senha.'); return; }
 
         btn.disabled = true;
         btn.textContent = 'Entrando...';
@@ -40,14 +37,18 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
 
             if (res.ok && data.sucesso) {
+                // Salva dados de sessão com expiração
+                const expiresAt = Date.now() + (data.expires_in * 1000);
                 sessionStorage.setItem('infofarma_user', data.usuario);
+                sessionStorage.setItem('infofarma_token', data.access_token);
+                sessionStorage.setItem('infofarma_expires', expiresAt);
                 window.location.href = '/dashboard';
             } else {
                 showError(data.erro || 'E-mail/usuário ou senha incorretos.');
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
             }
-        } catch (err) {
+        } catch {
             showError('Erro de conexão. Tente novamente.');
             btn.disabled = false;
             btn.textContent = 'Entrar';
@@ -67,8 +68,7 @@ function showError(msg) {
         err = document.createElement('p');
         err.id = 'login-error';
         err.style.cssText = 'color:#ef4444;font-size:13px;text-align:center;margin-top:-10px;margin-bottom:10px;';
-        const btn = document.getElementById('btnEntrar');
-        btn.parentNode.insertBefore(err, btn);
+        document.getElementById('btnEntrar').before(err);
     }
     err.textContent = msg;
 }
