@@ -46,8 +46,13 @@ export default async function handler(req, res) {
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean))
         return res.status(400).json({ erro: 'E-mail inválido.' });
-    if (!/^[a-zA-Z0-9_.-]{3,30}$/.test(usernameClean))
-        return res.status(400).json({ erro: 'Usuário: 3-30 caracteres, apenas letras, números, _ . -' });
+
+    // ─── Validação do usuário: 3-30 caracteres, sem espaços ──
+    if (usernameClean.length < 3 || usernameClean.length > 30)
+        return res.status(400).json({ erro: 'Usuário deve ter entre 3 e 30 caracteres.' });
+    if (/\s/.test(usernameClean))
+        return res.status(400).json({ erro: 'Usuário não pode conter espaços.' });
+
     if (passwordRaw.length < 8)
         return res.status(400).json({ erro: 'A senha deve ter pelo menos 8 caracteres.' });
     if (passwordRaw.length > 72)
