@@ -39,16 +39,16 @@ export default async function handler(req, res) {
 
     if (!identifier || !password) return res.status(400).json({ erro: 'Preencha e-mail/usuário e senha.' });
 
-    const identifierClean = String(identifier).trim().toLowerCase().slice(0, 254);
+    const identifierClean = String(identifier).trim().slice(0, 254);
     const passwordRaw     = String(password).slice(0, 72);
 
     try {
-        let emailParaLogin = identifierClean;
+        let emailParaLogin = identifierClean.toLowerCase();
 
-        // ─── Se não for e-mail, busca o e-mail pelo username ─
+        // ─── Se não for e-mail, busca o e-mail pelo username (case-insensitive via ilike) ─
         if (!identifierClean.includes('@')) {
             const userRes = await fetch(
-                `${SUPABASE_URL}/rest/v1/perfis?username=eq.${encodeURIComponent(identifierClean)}&select=email`,
+                `${SUPABASE_URL}/rest/v1/perfis?username=ilike.${encodeURIComponent(identifierClean)}&select=email`,
                 { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
             );
             const users = await userRes.json();
