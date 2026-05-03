@@ -42,13 +42,12 @@
         radial-gradient(2px 2px at 35%  5%, rgba(255,255,255,0.8), transparent);
 }
 
-/* ✅ wrapper centralizado, sem altura mínima */
 .login-wrapper {
     position: relative; z-index: 10;
     width: 100%; max-width: 480px;
 }
 
-/* ─── LOGO dentro do card ────────────────────────────────────── */
+/* ─── LOGO ───────────────────────────────────────────────────── */
 .logo { text-align: center; margin-bottom: 24px; }
 .logo-text {
     font-family: 'Montserrat', sans-serif;
@@ -62,7 +61,7 @@
     letter-spacing: 3px; text-transform: uppercase; margin-top: 6px;
 }
 
-/* ─── CARD maior e com tudo dentro ──────────────────────────── */
+/* ─── CARD ───────────────────────────────────────────────────── */
 .card {
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.1);
@@ -71,16 +70,25 @@
     padding: 40px 44px 32px;
     box-shadow: 0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
 }
+
+/* ✅ "Bem-vindo de volta" maior */
 .card h2 {
-    font-size: 26px; font-weight: 600; color: #fff;
-    margin-bottom: 6px; text-align: center;
-}
-.card > p {
-    font-size: 14px; color: rgba(255,255,255,0.4);
-    margin-bottom: 28px; text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    text-align: center;
 }
 
-/* ─── CAMPOS maiores ─────────────────────────────────────────── */
+/* ✅ "Acesse sua conta para continuar" maior */
+.card > p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+/* ─── CAMPOS ─────────────────────────────────────────────────── */
 .field { position: relative; margin-bottom: 16px; }
 .field input {
     width: 100%; height: 52px;
@@ -105,10 +113,11 @@
 }
 .field input:focus ~ i { color: #06b6d4; }
 
+/* ✅ "Lembrar-me" e "Esqueci minha senha" maiores */
 .row-opts {
     display: flex; align-items: center;
     justify-content: space-between;
-    margin-bottom: 28px; font-size: 13px;
+    margin-bottom: 28px; font-size: 15px;
 }
 .row-opts label {
     display: flex; align-items: center;
@@ -118,7 +127,7 @@
 .row-opts a { color: #06b6d4; text-decoration: none; }
 .row-opts a:hover { text-decoration: underline; }
 
-/* ─── BOTÃO maior ────────────────────────────────────────────── */
+/* ─── BOTÃO ──────────────────────────────────────────────────── */
 .btn-entrar {
     width: 100%; height: 52px; border: none; border-radius: 12px;
     background: linear-gradient(135deg, #0ea5e9, #06b6d4);
@@ -132,27 +141,34 @@
 .btn-entrar:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(6,182,212,0.5); }
 .btn-entrar:active { transform: translateY(0); }
 
-.link-registro { text-align: center; font-size: 14px; color: rgba(255,255,255,0.4); }
+/* ✅ "Não tem uma conta? Registrar-se" maior */
+.link-registro {
+    text-align: center;
+    font-size: 15px;
+    color: rgba(255,255,255,0.4);
+}
 .link-registro a { color: #06b6d4; text-decoration: none; font-weight: 600; }
 .link-registro a:hover { text-decoration: underline; }
 
-/* ─── BADGES e RODAPÉ dentro do card ────────────────────────── */
+/* ✅ Badges maiores */
 .badges {
     display: flex; justify-content: center;
     gap: 10px; margin-top: 24px; flex-wrap: wrap;
 }
 .badge {
-    font-size: 10px; color: rgba(255,255,255,0.3);
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(255,255,255,0.08);
-    border-radius: 20px; padding: 4px 12px;
+    border-radius: 20px; padding: 5px 14px;
     letter-spacing: 0.5px; text-transform: uppercase;
 }
 
+/* ✅ Rodapé maior */
 .login-footer {
     text-align: center;
     padding: 16px 0 0;
-    font-size: 11px;
-    color: rgba(255,255,255,0.2);
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
     letter-spacing: 0.3px;
 }
