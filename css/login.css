@@ -41,9 +41,19 @@
         radial-gradient(2px 2px at 35%  5%, rgba(255,255,255,0.8), transparent);
 }
 
+/* ✅ wrapper ocupa altura total e empurra rodapé para baixo */
 .login-wrapper {
     position: relative; z-index: 10;
     width: 100%; max-width: 440px; padding: 20px;
+    min-height: calc(100vh - 40px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* agrupa logo + card + badges no centro */
+.login-wrapper > *:not(.login-footer) {
+    flex-shrink: 0;
 }
 
 .logo { text-align: center; margin-bottom: 20px; }
@@ -133,10 +143,12 @@
     letter-spacing: 0.5px; text-transform: uppercase;
 }
 
+/* ✅ rodapé sempre no fim da página */
 .login-footer {
     text-align: center;
-    padding: 10px 20px 16px;
+    padding: 10px 20px 0;
     font-size: 11px;
     color: rgba(255,255,255,0.25);
     letter-spacing: 0.3px;
+    margin-top: auto;
 }
