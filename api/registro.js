@@ -98,7 +98,7 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 email: emailClean,
                 password: passwordRaw,
-                data: { username: usernameClean }
+                data: { username: usernameClean, full_name: usernameClean }
             })
         });
 
