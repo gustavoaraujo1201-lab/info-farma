@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const u = user?.value.trim();
         const p = pass?.value.trim();
 
-        if (!u || !p) { showError('Preencha e-mail/usuário e senha.'); return; }
+        if (!u || !p) { showError('Preencha o e-mail e a senha.'); return; }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(u)) { showError('Digite um e-mail válido.'); return; }
 
         btn.disabled = true;
         btn.textContent = 'Entrando...';
@@ -31,20 +32,19 @@ document.addEventListener('DOMContentLoaded', () => {
             const res = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ identifier: u, password: p })
+                body: JSON.stringify({ email: u, password: p })
             });
 
             const data = await res.json();
 
             if (res.ok && data.sucesso) {
-                // Salva dados de sessão com expiração
                 const expiresAt = Date.now() + (data.expires_in * 1000);
                 sessionStorage.setItem('infofarma_user', data.usuario);
                 sessionStorage.setItem('infofarma_token', data.access_token);
                 sessionStorage.setItem('infofarma_expires', expiresAt);
                 window.location.href = '/dashboard';
             } else {
-                showError(data.erro || 'E-mail/usuário ou senha incorretos.');
+                showError(data.erro || 'E-mail ou senha incorretos.');
                 btn.disabled = false;
                 btn.textContent = 'Entrar';
             }

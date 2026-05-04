@@ -1,5 +1,5 @@
 // api/login.js — Vercel Serverless Function
-// Usa Supabase Auth: verificação de senha via bcrypt, retorna JWT seguro
+// Login direto por e-mail — 1 requisição só, sem busca extra
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://ixbstkgxlyadphlpnshn.supabase.co';
 const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4YnN0a2d4bHlhZHBobHBuc2huIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTc2OTIsImV4cCI6MjA5MzI5MzY5Mn0.QmTgpuJApLRAS9KDVkS4qVh_zC3cFS6_vmEsmuMDdfk';
@@ -8,8 +8,8 @@ const SUPABASE_KEY = process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5c
 const attempts = new Map();
 function isRateLimited(ip) {
     const now = Date.now();
-    const windowMs = 15 * 60 * 1000; // 15 minutos
-    const max = 10; // máx 10 tentativas de login por IP
+    const windowMs = 15 * 60 * 1000;
+    const max = 10;
     const data = attempts.get(ip) || { count: 0, start: now };
     if (now - data.start > windowMs) { attempts.set(ip, { count: 1, start: now }); return false; }
     if (data.count >= max) return true;
@@ -18,7 +18,6 @@ function isRateLimited(ip) {
     return false;
 }
 
-// ─── Headers de segurança HTTP ───────────────────────────────
 function setSecurityHeaders(res) {
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'DENY');
@@ -33,53 +32,40 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).json({ erro: 'Método não permitido.' });
 
     const ip = req.headers['x-forwarded-for']?.split(',')[0] || 'unknown';
-    if (isRateLimited(ip)) return res.status(429).json({ erro: 'Muitas tentativas. Aguarde 15 minutos e tente novamente.' });
+    if (isRateLimited(ip)) return res.status(429).json({ erro: 'Muitas tentativas. Aguarde 15 minutos.' });
 
-    const { identifier, password } = req.body || {};
+    const { email, password } = req.body || {};
 
-    if (!identifier || !password) return res.status(400).json({ erro: 'Preencha e-mail/usuário e senha.' });
+    if (!email || !password) return res.status(400).json({ erro: 'Preencha o e-mail e a senha.' });
 
-    const identifierClean = String(identifier).trim().slice(0, 254);
-    const passwordRaw     = String(password).slice(0, 72);
+    const emailClean  = String(email).trim().toLowerCase().slice(0, 254);
+    const passwordRaw = String(password).slice(0, 72);
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailClean))
+        return res.status(400).json({ erro: 'E-mail inválido.' });
 
     try {
-        let emailParaLogin = identifierClean.toLowerCase();
-
-        // ─── Se não for e-mail, busca o e-mail pelo username (case-insensitive via ilike) ─
-        if (!identifierClean.includes('@')) {
-            const userRes = await fetch(
-                `${SUPABASE_URL}/rest/v1/perfis?username=ilike.${encodeURIComponent(identifierClean)}&select=email`,
-                { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
-            );
-            const users = await userRes.json();
-            if (!Array.isArray(users) || users.length === 0)
-                return res.status(401).json({ erro: 'E-mail/usuário ou senha incorretos.' });
-            emailParaLogin = users[0].email;
-        }
-
-        // ─── Autentica via Supabase Auth (verifica bcrypt internamente) ──
+        // ─── Uma única requisição ao Supabase Auth ───────────
         const authRes = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
             method: 'POST',
             headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: emailParaLogin, password: passwordRaw })
+            body: JSON.stringify({ email: emailClean, password: passwordRaw })
         });
 
         const authData = await authRes.json();
 
         if (!authRes.ok) {
-            // Mensagem genérica para não vazar informação
-            return res.status(401).json({ erro: 'E-mail/usuário ou senha incorretos.' });
+            return res.status(401).json({ erro: 'E-mail ou senha incorretos.' });
         }
 
-        // ─── Busca o username do perfil ──────────────────────
-        const username = authData?.user?.user_metadata?.username || emailParaLogin.split('@')[0];
+        // Username vem do user_metadata salvo no registro
+        const username = authData?.user?.user_metadata?.username || emailClean.split('@')[0];
 
-        // ─── Retorna access_token seguro para o frontend ─────
         return res.json({
             sucesso: true,
             usuario: username,
-            access_token: authData.access_token,   // JWT assinado pelo Supabase
-            expires_in: authData.expires_in         // tempo de expiração em segundos
+            access_token: authData.access_token,
+            expires_in: authData.expires_in
         });
 
     } catch (err) {
