@@ -713,38 +713,39 @@ footer p { font-size: 12px; color: var(--muted); }
     margin-bottom: 14px;
 }
 
-/* Tabela sem scroll horizontal — cabe na tela */
+/* Tabela com largura automática — mostra tudo sem cortar */
 #medTable {
-    table-layout: fixed;
+    table-layout: auto;
     width: 100%;
 }
 
 #medTable th, #medTable td {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    vertical-align: middle;
+    overflow: visible;
+    text-overflow: unset;
+    white-space: normal;
+    vertical-align: top;
+    word-break: break-word;
 }
 
-/* Larguras proporcionais das 8 colunas */
-#medTable th:nth-child(1), #medTable td:nth-child(1) { width: 13%; } /* Nome */
-#medTable th:nth-child(2), #medTable td:nth-child(2) { width: 18%; } /* Princípio Ativo */
-#medTable th:nth-child(3), #medTable td:nth-child(3) { width: 10%; } /* Tipo */
-#medTable th:nth-child(4), #medTable td:nth-child(4) { width: 9%;  } /* Nº Reg */
-#medTable th:nth-child(5), #medTable td:nth-child(5) { width: 14%; } /* Nº Processo */
-#medTable th:nth-child(6), #medTable td:nth-child(6) { width: 22%; } /* Empresa */
-#medTable th:nth-child(7), #medTable td:nth-child(7) { width: 7%;  } /* Situação */
-#medTable th:nth-child(8), #medTable td:nth-child(8) { width: 7%;  } /* Vencimento */
+/* Larguras mínimas para cada coluna */
+#medTable th:nth-child(1), #medTable td:nth-child(1) { min-width: 140px; } /* Nome */
+#medTable th:nth-child(2), #medTable td:nth-child(2) { min-width: 160px; } /* Princípio Ativo */
+#medTable th:nth-child(3), #medTable td:nth-child(3) { min-width: 100px; } /* Tipo */
+#medTable th:nth-child(4), #medTable td:nth-child(4) { min-width: 100px; } /* Nº Reg */
+#medTable th:nth-child(5), #medTable td:nth-child(5) { min-width: 160px; } /* Nº Processo */
+#medTable th:nth-child(6), #medTable td:nth-child(6) { min-width: 220px; } /* Empresa */
+#medTable th:nth-child(7), #medTable td:nth-child(7) { min-width:  70px; } /* Situação */
+#medTable th:nth-child(8), #medTable td:nth-child(8) { min-width:  85px; } /* Vencimento */
 
-/* Remove scroll horizontal da tabela */
+/* Scroll horizontal apenas se a tela for muito pequena */
 .table-wrap {
-    overflow-x: visible;
+    overflow-x: auto;
 }
 
-.principio-cell  { font-size: 13px; color: var(--muted); }
-.empresa-cell    { font-size: 12px; color: var(--muted); }
+.principio-cell  { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.empresa-cell    { font-size: 12px; color: var(--muted); line-height: 1.4; }
 .processo-cell   { font-size: 12px; color: var(--muted); }
-.vencimento-cell { font-size: 13px; }
+.vencimento-cell { font-size: 13px; white-space: nowrap; }
 .mono            { font-family: 'Courier New', monospace; font-size: 12px; color: var(--muted); }
 .vazio           { color: rgba(255,255,255,0.2); }
 
