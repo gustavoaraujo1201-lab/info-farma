@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Proteção de rota: redireciona para login se não estiver autenticado -->
     <script>
         if (!sessionStorage.getItem('infofarma_user')) {
             window.location.replace('/login');
@@ -56,9 +57,9 @@
                         <a href="#" class="btn-secondary" data-page="legislacao"><i class='bx bx-book-open'></i> Ver Legislação</a>
                     </div>
                     <div class="hero-stats">
-                        <div class="stat"><span class="stat-num">9.724</span><span class="stat-label">Medicamentos na Base</span></div>
-                        <div class="stat"><span class="stat-num red">8.292</span><span class="stat-label">Registrados</span></div>
-                        <div class="stat"><span class="stat-num orange">1.432</span><span class="stat-label">Notificados</span></div>
+                        <div class="stat"><span class="stat-num">143</span><span class="stat-label">Medicamentos na Base</span></div>
+                        <div class="stat"><span class="stat-num red">14</span><span class="stat-label">Tarja Preta</span></div>
+                        <div class="stat"><span class="stat-num orange">99</span><span class="stat-label">Tarja Vermelha</span></div>
                         <div class="stat"><span class="stat-num accent">25+</span><span class="stat-label">Leis e Resoluções</span></div>
                     </div>
                 </div>
@@ -71,7 +72,7 @@
                     <a href="#" class="card-item" data-page="medicamentos">
                         <div class="card-icon blue"><i class='bx bx-capsule'></i></div>
                         <h3>Medicamentos</h3>
-                        <p>Banco de dados com 9.724 registros ANVISA. Busca por nome, princípio ativo e empresa.</p>
+                        <p>Banco de dados com registros ANVISA. Busca por nome, princípio ativo, tarja e classe.</p>
                         <span class="card-arrow"><i class='bx bx-right-arrow-alt'></i></span>
                     </a>
                     <a href="#" class="card-item" data-page="legislacao">
@@ -115,8 +116,6 @@
             <div class="section-label">Medicamentos</div>
             <h2 class="section-title">Base de Dados ANVISA</h2>
             <p class="section-sub">9.724 medicamentos registrados e notificados. Busque por nome, princípio ativo, empresa ou número de registro.</p>
-
-            <!-- Barra de busca e filtros -->
             <div class="search-bar">
                 <i class='bx bx-search search-icon'></i>
                 <input type="text" id="searchInput" placeholder="Ex: Amoxicilina, Dipirona, Omeprazol...">
@@ -126,33 +125,26 @@
                     <option value="NOTIFICADO">Notificado</option>
                 </select>
             </div>
-
-            <!-- Contador de resultados -->
             <p id="medContador" class="med-contador">Carregando base de dados...</p>
-
-            <!-- Tabela -->
             <div class="table-wrap">
                 <table id="medTable">
-                    <thead>
-                        <tr>
-                            <th>Nome do Produto</th>
-                            <th>Princípio Ativo</th>
-                            <th>Tipo</th>
-                            <th>Nº Registro</th>
-                            <th>Empresa</th>
-                            <th>Vencimento</th>
-                        </tr>
-                    </thead>
+                    <thead><tr>
+                        <th>Nome do Produto</th>
+                        <th>Complemento da Marca</th>
+                        <th>Princípio Ativo / Descrição</th>
+                        <th>Tipo</th>
+                        <th>Nº Regularização</th>
+                        <th>Nº Processo</th>
+                        <th>Empresa Detentora</th>
+                        <th>Situação</th>
+                        <th>Vencimento</th>
+                    </tr></thead>
                     <tbody id="medBody">
-                        <tr><td colspan="6" style="text-align:center;padding:2rem;color:var(--muted)">Carregando...</td></tr>
+                        <tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--muted)">Carregando...</td></tr>
                     </tbody>
                 </table>
             </div>
-
-            <!-- Paginação -->
             <div id="medPaginacao"></div>
-
-            <div id="noResults" class="no-results" style="display:none">Nenhum medicamento encontrado.</div>
         </div>
     </div>
 
@@ -259,7 +251,7 @@
                     </ul>
                 </div>
                 <div class="sobre-stats">
-                    <div class="sobre-stat"><span>9.724</span><p>Medicamentos na base</p></div>
+                    <div class="sobre-stat"><span>143</span><p>Medicamentos na base</p></div>
                     <div class="sobre-stat"><span>25+</span><p>Normas catalogadas</p></div>
                     <div class="sobre-stat"><span>6</span><p>Seções de conteúdo</p></div>
                     <div class="sobre-stat"><span>2026</span><p>Dados atualizados</p></div>
