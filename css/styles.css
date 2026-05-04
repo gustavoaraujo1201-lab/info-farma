@@ -713,37 +713,55 @@ footer p { font-size: 12px; color: var(--muted); }
     margin-bottom: 14px;
 }
 
-/* Tabela com largura automática — mostra tudo sem cortar */
-#medTable {
-    table-layout: auto;
-    width: 100%;
+/* ── Tabela ANVISA — layout limpo e sem cortes ── */
+
+/* A página de medicamentos usa largura total (sem container restrito) */
+#page-medicamentos .page-inner {
+    max-width: 100%;
+    padding-left: 48px;
+    padding-right: 48px;
 }
 
-#medTable th, #medTable td {
-    overflow: visible;
-    text-overflow: unset;
-    white-space: normal;
-    vertical-align: top;
-    word-break: break-word;
-}
-
-/* Larguras mínimas para cada coluna */
-#medTable th:nth-child(1), #medTable td:nth-child(1) { min-width: 140px; } /* Nome */
-#medTable th:nth-child(2), #medTable td:nth-child(2) { min-width: 160px; } /* Princípio Ativo */
-#medTable th:nth-child(3), #medTable td:nth-child(3) { min-width: 100px; } /* Tipo */
-#medTable th:nth-child(4), #medTable td:nth-child(4) { min-width: 100px; } /* Nº Reg */
-#medTable th:nth-child(5), #medTable td:nth-child(5) { min-width: 160px; } /* Nº Processo */
-#medTable th:nth-child(6), #medTable td:nth-child(6) { min-width: 220px; } /* Empresa */
-#medTable th:nth-child(7), #medTable td:nth-child(7) { min-width:  70px; } /* Situação */
-#medTable th:nth-child(8), #medTable td:nth-child(8) { min-width:  85px; } /* Vencimento */
-
-/* Scroll horizontal apenas se a tela for muito pequena */
 .table-wrap {
     overflow-x: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
 }
 
-.principio-cell  { font-size: 13px; color: var(--muted); line-height: 1.4; }
-.empresa-cell    { font-size: 12px; color: var(--muted); line-height: 1.4; }
+#medTable {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Cabeçalhos: nunca quebram no meio */
+#medTable thead th {
+    white-space: nowrap;
+    vertical-align: middle;
+    padding: 14px 12px;
+}
+
+/* Células: conteúdo quebra linha naturalmente */
+#medTable tbody td {
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: top;
+    padding: 12px 12px;
+    line-height: 1.45;
+}
+
+/* Larguras fixas proporcionais — somam 100% */
+#medTable th:nth-child(1), #medTable td:nth-child(1) { width: 13%; } /* Nome */
+#medTable th:nth-child(2), #medTable td:nth-child(2) { width: 17%; } /* Princípio Ativo */
+#medTable th:nth-child(3), #medTable td:nth-child(3) { width:  9%; } /* Tipo */
+#medTable th:nth-child(4), #medTable td:nth-child(4) { width:  9%; } /* Nº Reg */
+#medTable th:nth-child(5), #medTable td:nth-child(5) { width: 14%; } /* Nº Processo */
+#medTable th:nth-child(6), #medTable td:nth-child(6) { width: 26%; } /* Empresa */
+#medTable th:nth-child(7), #medTable td:nth-child(7) { width:  6%; } /* Situação */
+#medTable th:nth-child(8), #medTable td:nth-child(8) { width:  6%; } /* Vencimento */
+
+.principio-cell  { font-size: 13px; color: var(--muted); }
+.empresa-cell    { font-size: 12px; color: var(--muted); }
 .processo-cell   { font-size: 12px; color: var(--muted); }
 .vencimento-cell { font-size: 13px; white-space: nowrap; }
 .mono            { font-family: 'Courier New', monospace; font-size: 12px; color: var(--muted); }
