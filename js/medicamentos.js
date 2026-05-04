@@ -48,7 +48,7 @@ function renderTabela() {
     const pagina = filteredData.slice(inicio, inicio + PER_PAGE);
 
     if (pagina.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--muted)">Nenhum medicamento encontrado.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--muted)">Nenhum medicamento encontrado.</td></tr>';
         document.getElementById('medPaginacao').innerHTML = '';
         return;
     }
@@ -56,7 +56,6 @@ function renderTabela() {
     tbody.innerHTML = pagina.map(m => `
         <tr>
             <td><strong>${esc(m.nome)}</strong></td>
-            <td>${esc(m.complemento) || '<span class="vazio">—</span>'}</td>
             <td class="principio-cell">${esc(m.principioAtivo)}</td>
             <td><span class="badge-tipo ${m.tipo === 'NOTIFICADO' ? 'notificado' : ''}">${esc(m.tipo)}</span></td>
             <td class="mono">${esc(m.numeroReg)}</td>
